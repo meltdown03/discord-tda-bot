@@ -1,0 +1,4 @@
+tda-api
+discord.py
+xmltodict
+webdriver-manager
