@@ -1,8 +1,8 @@
 import logging
 import os
+
 import discord
 from discord import colour
-
 from discord.ext import commands
 from httpx._exceptions import HTTPStatusError
 
@@ -93,7 +93,8 @@ class DCBot(commands.Cog):
         user = ctx.author
         if user.id == DC_ID:
             bal = await self.tda_client.get_bal()
-            embed = discord.Embed(title="Net Liq. Balance:", type="rich", colour=discord.Color.dark_green(), description=f"${bal}")
+            embed = discord.Embed(title="Net Liq. Balance:", type="rich",
+                                  colour=discord.Color.dark_green(), description=f"${bal}")
             await user.send(embed=embed)
         else:
             await user.send("Unauthorized")
@@ -103,7 +104,8 @@ class DCBot(commands.Cog):
         user = ctx.author
         if user.id == DC_ID:
             bp = await self.tda_client.get_bp()
-            embed = discord.Embed(title="Buying Power:", type="rich", colour=discord.Color.dark_green(), description=f"${bp}")
+            embed = discord.Embed(title="Buying Power:", type="rich",
+                                  colour=discord.Color.dark_green(), description=f"${bp}")
             await user.send(embed=embed)
         else:
             await user.send("Unauthorized")
@@ -113,7 +115,8 @@ class DCBot(commands.Cog):
         user = ctx.author
         if user.id == DC_ID:
             pos = await self.tda_client.get_pos()
-            embed = discord.Embed(title="Positions:", type="rich", colour=discord.Color.dark_green(), description=pos)
+            embed = discord.Embed(title="Positions:", type="rich",
+                                  colour=discord.Color.dark_green(), description=pos)
             await user.send(embed=embed)
         else:
             await user.send("Unauthorized")

@@ -11,8 +11,8 @@ from const import TOKEN_PATH
 from parsers import (orderCancelledFormatter, orderEntryRequestFormatter,
                      orderFillFormatter)
 from tda.auth import client_from_token_file, easy_client
-from tda.streaming import StreamClient, UnexpectedResponseCode
 from tda.client import Client
+from tda.streaming import StreamClient, UnexpectedResponseCode
 
 logger = logging.getLogger('')
 logger.setLevel(logging.DEBUG)
@@ -57,7 +57,7 @@ class TDABot():
         msg = ""
         for i in pos_json[0]['securitiesAccount']['positions']:
             if i['instrument']['assetType'] == 'EQUITY':
-                msg += str(f"{i['instrument']['symbol']} shares x{i['longQuantity']}\n") 
+                msg += str(f"{i['instrument']['symbol']} shares x{i['longQuantity']}\n")
             elif i['instrument']['assetType'] == 'OPTION':
                 msg += str(f"{i['instrument']['description']} x{i['longQuantity']}\n")
         print(msg)
@@ -84,7 +84,8 @@ class TDABot():
                 msgToSend = ''
 
                 if msgType == 'OrderEntryRequest':
-                    msgToSend = orderEntryRequestFormatter(parsedDict, timestamp)
+                    msgToSend = orderEntryRequestFormatter(
+                        parsedDict, timestamp)
                     # return
                 elif msgType == 'OrderFill':
                     msgToSend = orderFillFormatter(parsedDict, timestamp)
