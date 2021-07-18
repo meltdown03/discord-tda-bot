@@ -1,5 +1,7 @@
 import logging
 import os
+import discord
+from discord import colour
 
 from discord.ext import commands
 from httpx._exceptions import HTTPStatusError
@@ -35,7 +37,6 @@ class DCBot(commands.Cog):
 
     @commands.command()
     async def start(self, ctx):
-        print("start command ran")
         user = self.get_bot_user
         await user.send("TDA Bot Online, enter TDA acount number:")
 
@@ -89,20 +90,30 @@ class DCBot(commands.Cog):
 
     @commands.command()
     async def bal(self, ctx):
-        print("bal command ran")
         user = ctx.author
         if user.id == DC_ID:
             bal = await self.tda_client.get_bal()
-            await user.send(f"Current Value: $ {bal}")
+            embed = discord.Embed(title="Net Liq. Balance:", type="rich", colour=discord.Color.dark_green(), description=f"${bal}")
+            await user.send(embed=embed)
         else:
             await user.send("Unauthorized")
 
     @commands.command()
     async def bp(self, ctx):
-        print("bp command ran")
         user = ctx.author
         if user.id == DC_ID:
             bp = await self.tda_client.get_bp()
-            await user.send(f"Current Buying Power: $ {bp}")
+            embed = discord.Embed(title="Buying Power:", type="rich", colour=discord.Color.dark_green(), description=f"${bp}")
+            await user.send(embed=embed)
+        else:
+            await user.send("Unauthorized")
+
+    @commands.command()
+    async def pos(self, ctx):
+        user = ctx.author
+        if user.id == DC_ID:
+            pos = await self.tda_client.get_pos()
+            embed = discord.Embed(title="Positions:", type="rich", colour=discord.Color.dark_green(), description=pos)
+            await user.send(embed=embed)
         else:
             await user.send("Unauthorized")

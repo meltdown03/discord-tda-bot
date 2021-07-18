@@ -1,7 +1,6 @@
 import json
 import logging
 import os
-import asyncio
 
 import discord
 import xmltodict
@@ -13,6 +12,7 @@ from parsers import (orderCancelledFormatter, orderEntryRequestFormatter,
                      orderFillFormatter)
 from tda.auth import client_from_token_file, easy_client
 from tda.streaming import StreamClient, UnexpectedResponseCode
+from tda.client import Client
 
 logger = logging.getLogger('')
 logger.setLevel(logging.DEBUG)
@@ -40,18 +40,28 @@ class TDABot():
                 TOKEN_PATH, self.client_id, asyncio=True)
 
     async def get_bp(self):
-        print("get_bp command running")
         accts = await self.client.get_accounts()
         acct_info = accts.json()
         bp = acct_info[0]['securitiesAccount']['projectedBalances']['availableFunds']
         return bp
 
     async def get_bal(self):
-        print("get_bal command running")
         accts = await self.client.get_accounts()
         acct_info = accts.json()
         bal = acct_info[0]['securitiesAccount']['currentBalances']['liquidationValue']
         return bal
+
+    async def get_pos(self):
+        pos = await self.client.get_accounts(fields=Client.Account.Fields.POSITIONS)
+        pos_json = pos.json()
+        msg = ""
+        for i in pos_json[0]['securitiesAccount']['positions']:
+            if i['instrument']['assetType'] == 'EQUITY':
+                msg += str(f"{i['instrument']['symbol']} shares x{i['longQuantity']}\n") 
+            elif i['instrument']['assetType'] == 'OPTION':
+                msg += str(f"{i['instrument']['description']} x{i['longQuantity']}\n")
+        print(msg)
+        return msg
 
     async def update_game(self):
         bp = await self.get_bp()
@@ -60,7 +70,6 @@ class TDABot():
         await self.bot.change_presence(activity=game)
 
     async def get_activity(self, msg):
-        print("get_activity ran")
         user = self.cog.get_bot_user
         timestamp = msg['timestamp']
         for msg in msg['content']:
@@ -68,7 +77,6 @@ class TDABot():
             msgData = msg['MESSAGE_DATA']
 
             if msgData:
-                print("msgData received")
                 await self.update_game()
                 parsedDict = xmltodict.parse(msgData)
                 rawJsonMSG = '```json\n' + \
