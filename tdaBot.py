@@ -60,7 +60,6 @@ class TDABot():
                 msg += str(f"{i['instrument']['symbol']} shares x{i['longQuantity']}\n")
             elif i['instrument']['assetType'] == 'OPTION':
                 msg += str(f"{i['instrument']['description']} x{i['longQuantity']}\n")
-        print(msg)
         return msg
 
     async def update_game(self):
