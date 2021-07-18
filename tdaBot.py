@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import asyncio
 
 import discord
 import xmltodict
@@ -61,7 +62,7 @@ class TDABot():
     async def get_activity(self, msg):
         print("get_activity ran")
         user = self.cog.get_bot_user
-
+        timestamp = msg['timestamp']
         for msg in msg['content']:
             msgType = msg['MESSAGE_TYPE']
             msgData = msg['MESSAGE_DATA']
@@ -75,13 +76,13 @@ class TDABot():
                 msgToSend = ''
 
                 if msgType == 'OrderEntryRequest':
-                    msgToSend = orderEntryRequestFormatter(parsedDict)
+                    msgToSend = orderEntryRequestFormatter(parsedDict, timestamp)
                     # return
                 elif msgType == 'OrderFill':
-                    msgToSend = orderFillFormatter(parsedDict)
+                    msgToSend = orderFillFormatter(parsedDict, timestamp)
 
                 elif msgType == 'UROUT':
-                    msgToSend = orderCancelledFormatter(parsedDict)
+                    msgToSend = orderCancelledFormatter(parsedDict, timestamp)
 
                 else:
                     return

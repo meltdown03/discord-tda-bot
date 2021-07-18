@@ -2,7 +2,7 @@ from datetime import datetime
 from dateutil.parser import parse
 
 
-def orderEntryRequestFormatter(msgDict: dict):
+def orderEntryRequestFormatter(msgDict: dict, timestamp):
     msgDict = msgDict.get('OrderEntryRequestMessage').get('Order')
 
     msg = '**'
@@ -28,8 +28,7 @@ def orderEntryRequestFormatter(msgDict: dict):
     if optionTDAString:
         msg += '(' + optionTDAString + ') '
 
-    msg += datetime.fromisoformat(parse(msgDict.get('OrderEnteredDateTime')
-                                        ).isoformat()).astimezone().strftime("%m-%d-%Y %H:%M:%S %Z")
+    msg += datetime.fromtimestamp(timestamp/1000.0).astimezone().strftime("%m-%d-%Y %H:%M:%S %Z")
 
     msg += '\n```diff\n'
 
@@ -53,7 +52,7 @@ def orderEntryRequestFormatter(msgDict: dict):
     return msg
 
 
-def orderFillFormatter(msgDict: dict):
+def orderFillFormatter(msgDict: dict, timestamp):
     order = msgDict.get('OrderFillMessage').get('Order')
     execInfo = msgDict.get('OrderFillMessage').get('ExecutionInformation')
 
@@ -80,8 +79,7 @@ def orderFillFormatter(msgDict: dict):
     if optionTDAString:
         msg += '(' + optionTDAString + ') '
 
-    msg += datetime.fromisoformat(parse(execInfo.get('Timestamp')
-                                        ).isoformat()).astimezone().strftime("%m/%d/%Y %H:%M:%S %Z")
+    msg += datetime.fromtimestamp(timestamp/1000.0).astimezone().strftime("%m-%d-%Y %H:%M:%S %Z")
 
     msg += '\n```diff\n'
 
@@ -101,7 +99,7 @@ def orderFillFormatter(msgDict: dict):
     return msg
 
 
-def orderCancelledFormatter(msgDict: dict):
+def orderCancelledFormatter(msgDict: dict, timestamp):
     msgDict = msgDict.get('UROUTMessage').get('Order')
 
     msg = '**'
@@ -127,8 +125,7 @@ def orderCancelledFormatter(msgDict: dict):
     if optionTDAString:
         msg += '(' + optionTDAString + ') '
 
-    msg += datetime.fromisoformat(parse(msgDict.get('OrderEnteredDateTime')
-                                        ).isoformat()).astimezone().strftime("%m-%d-%Y %H:%M:%S %Z")
+    msg += datetime.fromtimestamp(timestamp/1000.0).astimezone().strftime("%m-%d-%Y %H:%M:%S %Z")
 
     msg += '\n```diff\n'
 

@@ -3,7 +3,7 @@ import logging
 import discord
 from discord.ext.commands import bot
 
-from const import *
+from const import DC_TOKEN
 from dcBot import DCBot
 
 logger = logging.getLogger()
