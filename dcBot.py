@@ -2,10 +2,10 @@ import logging
 import os
 
 from discord.ext import commands
-from const import DC_ID, TOKEN_PATH
-from tdaBot import TDABot
 from httpx._exceptions import HTTPStatusError
 
+from const import DC_ID, TOKEN_PATH
+from tdaBot import TDABot
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)

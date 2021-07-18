@@ -1,10 +1,10 @@
-import discord
 import logging
 
+import discord
 from discord.ext.commands import bot
 
-from dcBot import DCBot
 from const import *
+from dcBot import DCBot
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)

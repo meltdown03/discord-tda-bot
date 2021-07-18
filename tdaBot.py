@@ -1,17 +1,17 @@
-import logging
 import json
-import xmltodict
+import logging
 import os
-import discord
 
-from tda.auth import client_from_token_file, easy_client
-from tda.streaming import StreamClient, UnexpectedResponseCode
+import discord
+import xmltodict
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
 from const import TOKEN_PATH
-from parsers import orderFillFormatter, orderEntryRequestFormatter, orderCancelledFormatter
-
+from parsers import (orderCancelledFormatter, orderEntryRequestFormatter,
+                     orderFillFormatter)
+from tda.auth import client_from_token_file, easy_client
+from tda.streaming import StreamClient, UnexpectedResponseCode
 
 logger = logging.getLogger('')
 logger.setLevel(logging.DEBUG)
