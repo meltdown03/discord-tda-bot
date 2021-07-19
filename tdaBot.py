@@ -30,7 +30,7 @@ class TDABot():
         self.client_id = client_id
         self.ref_url = ref_url
 
-        if not os.path.exists(TOKEN_PATH):
+        if not os.access(TOKEN_PATH, 2):
             self.client = easy_client(self.client_id, self.ref_url, TOKEN_PATH,
                                       webdriver_func=lambda: webdriver.Chrome(
                                           ChromeDriverManager().install()),
@@ -39,18 +39,21 @@ class TDABot():
             self.client = client_from_token_file(
                 TOKEN_PATH, self.client_id, asyncio=True)
 
+    @property
     async def get_bp(self):
         accts = await self.client.get_accounts()
         acct_info = accts.json()
         bp = acct_info[0]['securitiesAccount']['projectedBalances']['availableFunds']
         return bp
 
+    @property
     async def get_bal(self):
         accts = await self.client.get_accounts()
         acct_info = accts.json()
         bal = acct_info[0]['securitiesAccount']['currentBalances']['liquidationValue']
         return bal
 
+    @property
     async def get_pos(self):
         pos = await self.client.get_accounts(fields=Client.Account.Fields.POSITIONS)
         pos_json = pos.json()
@@ -63,7 +66,7 @@ class TDABot():
         return msg
 
     async def update_game(self):
-        bp = await self.get_bp()
+        bp = await self.get_bp
         game = discord.Game(f"with ${bp}")
         print("updated status balance: $", bp)
         await self.bot.change_presence(activity=game)

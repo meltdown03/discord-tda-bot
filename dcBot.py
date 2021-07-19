@@ -56,7 +56,7 @@ class DCBot(commands.Cog):
         except TimeoutError:
             await user.send("Timed out, restart bot")
 
-        if not os.path.exists(TOKEN_PATH):
+        if not os.access(TOKEN_PATH, 2):
             await user.send("Enter TDA API redirect URL:")
 
             try:
@@ -92,7 +92,7 @@ class DCBot(commands.Cog):
     async def bal(self, ctx):
         user = ctx.author
         if user.id == DC_ID:
-            bal = await self.tda_client.get_bal()
+            bal = await self.tda_client.get_bal
             embed = discord.Embed(title="Net Liq. Balance:", type="rich",
                                   colour=discord.Color.dark_green(), description=f"${bal}")
             await user.send(embed=embed)
@@ -103,7 +103,7 @@ class DCBot(commands.Cog):
     async def bp(self, ctx):
         user = ctx.author
         if user.id == DC_ID:
-            bp = await self.tda_client.get_bp()
+            bp = await self.tda_client.get_bp
             embed = discord.Embed(title="Buying Power:", type="rich",
                                   colour=discord.Color.dark_green(), description=f"${bp}")
             await user.send(embed=embed)
@@ -114,7 +114,7 @@ class DCBot(commands.Cog):
     async def pos(self, ctx):
         user = ctx.author
         if user.id == DC_ID:
-            pos = await self.tda_client.get_pos()
+            pos = await self.tda_client.get_pos
             embed = discord.Embed(title="Positions:", type="rich",
                                   colour=discord.Color.dark_green(), description=pos)
             await user.send(embed=embed)

@@ -1,4 +1,5 @@
 from datetime import datetime
+
 from dateutil.parser import parse
 
 
@@ -28,7 +29,8 @@ def orderEntryRequestFormatter(msgDict: dict, timestamp):
     if optionTDAString:
         msg += '(' + optionTDAString + ') '
 
-    msg += datetime.fromtimestamp(timestamp/1000.0).astimezone().strftime("%m-%d-%Y %H:%M:%S %Z")
+    msg += datetime.fromtimestamp(timestamp /
+                                  1000.0).astimezone().strftime("%m-%d-%Y %H:%M:%S %Z")
 
     msg += '\n```diff\n'
 
@@ -79,7 +81,8 @@ def orderFillFormatter(msgDict: dict, timestamp):
     if optionTDAString:
         msg += '(' + optionTDAString + ') '
 
-    msg += datetime.fromtimestamp(timestamp/1000.0).astimezone().strftime("%m-%d-%Y %H:%M:%S %Z")
+    msg += datetime.fromtimestamp(timestamp /
+                                  1000.0).astimezone().strftime("%m-%d-%Y %H:%M:%S %Z")
 
     msg += '\n```diff\n'
 
@@ -125,7 +128,8 @@ def orderCancelledFormatter(msgDict: dict, timestamp):
     if optionTDAString:
         msg += '(' + optionTDAString + ') '
 
-    msg += datetime.fromtimestamp(timestamp/1000.0).astimezone().strftime("%m-%d-%Y %H:%M:%S %Z")
+    msg += datetime.fromtimestamp(timestamp /
+                                  1000.0).astimezone().strftime("%m-%d-%Y %H:%M:%S %Z")
 
     msg += '\n```diff\n'
 
