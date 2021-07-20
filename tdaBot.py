@@ -76,24 +76,26 @@ class TDABot():
         await self.bot.change_presence(activity=game)
 
     async def get_activity(self, msg):
+        loginMsgSent = False
         user = self.cog.get_bot_user
         timestamp = msg['timestamp']
         for msg in msg['content']:
             msgType = msg['MESSAGE_TYPE']
             msgData = msg['MESSAGE_DATA']
 
-            if msgData:
-                await self.update_game()
+            if msgData != "":
                 parsedDict = xmltodict.parse(msgData)
                 rawJsonMSG = '```json\n' + \
                     json.dumps(parsedDict, indent=2) + '\n```'
                 msgToSend = ''
 
                 if msgType == 'OrderEntryRequest':
+                    await self.update_game()
                     msgToSend = orderEntryRequestFormatter(parsedDict, timestamp)
                 elif msgType == 'OrderFill':
                     msgToSend = orderFillFormatter(parsedDict, timestamp)
                 elif msgType == 'UROUT':
+                    await self.update_game()
                     msgToSend = orderCancelledFormatter(parsedDict, timestamp)
                 else:
                     await user.send(f"Unknown msg received from ACCT_ACTIVITY Stream: {rawJsonMSG}")
@@ -101,7 +103,8 @@ class TDABot():
                 logger.info(f'Parsed Response JSON:\n{rawJsonMSG}')
                 await user.send(msgToSend)
 
-            elif msgData == "" and msgType == "SUBSCRIBED":
+            elif msgData == "" and msgType == "SUBSCRIBED" and loginMsgSent == False:
+                loginMsgSent = True
                 await user.send(f":white_check_mark: TDA account activity streamer started for account id: {self.account_id}\n\
          (You can now close this DM.)")
 
