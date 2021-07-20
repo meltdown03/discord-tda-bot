@@ -60,9 +60,13 @@ class TDABot():
         msg = ""
         for i in pos_json[0]['securitiesAccount']['positions']:
             if i['instrument']['assetType'] == 'EQUITY':
-                msg += str(f"{i['instrument']['symbol']} shares x{i['longQuantity']}\n")
+                msg += str(f"**{i['instrument']['symbol']}** shares x{i['longQuantity']}")
+                msg += str(f" at ${i['averagePrice']:.2f}\n --> Liq. Value ${i['marketValue']:.2f}\
+ Today's P/L: ${i['currentDayProfitLoss']:.2f}\n")
             elif i['instrument']['assetType'] == 'OPTION':
-                msg += str(f"{i['instrument']['description']} x{i['longQuantity']}\n")
+                msg += str(f"**{i['instrument']['description']}** x{i['longQuantity']}")
+                msg += str(f" at ${i['averagePrice']:.2f}\n --> Liq. Value ${i['marketValue']:.2f}\
+ Today's P/L: ${i['currentDayProfitLoss']:.2f}\n")
         return msg
 
     async def update_game(self):
@@ -86,33 +90,27 @@ class TDABot():
                 msgToSend = ''
 
                 if msgType == 'OrderEntryRequest':
-                    msgToSend = orderEntryRequestFormatter(
-                        parsedDict, timestamp)
-                    # return
+                    msgToSend = orderEntryRequestFormatter(parsedDict, timestamp)
                 elif msgType == 'OrderFill':
                     msgToSend = orderFillFormatter(parsedDict, timestamp)
-
                 elif msgType == 'UROUT':
                     msgToSend = orderCancelledFormatter(parsedDict, timestamp)
-
                 else:
-                    return
+                    await user.send(f"Unknown msg received from ACCT_ACTIVITY Stream: {rawJsonMSG}")
 
                 logger.info(f'Parsed Response JSON:\n{rawJsonMSG}')
+                await user.send(msgToSend)
 
-                try:
-                    await user.send(msgToSend)
-                except discord.errors.HTTPException as e:
-                    print(
-                        f'Discord HTTPException: {e}\nMsg Attempt: {msgToSend}')
+            elif msgData == "" and msgType == "SUBSCRIBED":
+                await user.send(f":white_check_mark: TDA account activity streamer started for account id: {self.account_id}\n\
+         (You can now close this DM.)")
 
     async def read_stream(self, user, account_id):
+        self.account_id = account_id
         try:
             stream_client = StreamClient(
-                self.client, account_id=int(account_id))
+                self.client, account_id=int(self.account_id))
             await stream_client.login()
-            await user.send(f":white_check_mark: TDA account activity streamer started for account id: {account_id}\n\
-         (You can now close this DM.)")
             await stream_client.quality_of_service(StreamClient.QOSLevel.EXPRESS)
             await stream_client.account_activity_sub()
             stream_client.add_account_activity_handler(self.get_activity)

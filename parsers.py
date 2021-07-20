@@ -88,14 +88,16 @@ def orderFillFormatter(msgDict: dict, timestamp):
 
     quantity = execInfo.get('Quantity')
     if order.get('OrderInstructions') == 'Buy':
-        msg += '+' + quantity + ' BOT - ' + execInfo.get('ExecutionPrice')
+        msg += '+' + quantity + ' BOT'
 
     if order.get('OrderInstructions') == 'Sell':
-        msg += '-' + quantity + ' SOLD - ' + execInfo.get('ExecutionPrice')
+        msg += '-' + quantity + ' SOLD'
 
     if optionTDAString:
         openClose = order.get('OpenClose')
         msg += ' to ' + openClose
+
+    msg += ' - ' + execInfo.get('ExecutionPrice')
 
     msg += '\n```'
 

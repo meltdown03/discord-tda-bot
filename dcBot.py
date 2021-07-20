@@ -94,7 +94,7 @@ class DCBot(commands.Cog):
         if user.id == DC_ID:
             bal = await self.tda_client.get_bal
             embed = discord.Embed(title="Net Liq. Balance:", type="rich",
-                                  colour=discord.Color.dark_green(), description=f"${bal}")
+                                  colour=discord.Color.dark_green(), description=f"${bal:.2f}")
             await user.send(embed=embed)
         else:
             await user.send("Unauthorized")
@@ -105,7 +105,7 @@ class DCBot(commands.Cog):
         if user.id == DC_ID:
             bp = await self.tda_client.get_bp
             embed = discord.Embed(title="Buying Power:", type="rich",
-                                  colour=discord.Color.dark_green(), description=f"${bp}")
+                                  colour=discord.Color.dark_green(), description=f"${bp:.2f}")
             await user.send(embed=embed)
         else:
             await user.send("Unauthorized")
