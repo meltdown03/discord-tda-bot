@@ -76,7 +76,6 @@ class TDABot():
         await self.bot.change_presence(activity=game)
 
     async def get_activity(self, msg):
-        loginMsgSent = False
         user = self.cog.get_bot_user
         timestamp = msg['timestamp']
         for msg in msg['content']:
@@ -103,12 +102,13 @@ class TDABot():
                 logger.info(f'Parsed Response JSON:\n{rawJsonMSG}')
                 await user.send(msgToSend)
 
-            elif msgData == "" and msgType == "SUBSCRIBED" and loginMsgSent == False:
-                loginMsgSent = True
+            elif msgData == "" and msgType == "SUBSCRIBED" and self.loginMsgSent == False:
+                self.loginMsgSent = True
                 await user.send(f":white_check_mark: TDA account activity streamer started for account id: {self.account_id}\n\
          (You can now close this DM.)")
 
     async def read_stream(self, user, account_id):
+        self.loginMsgSent = False
         self.account_id = account_id
         try:
             stream_client = StreamClient(
