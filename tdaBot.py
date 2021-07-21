@@ -58,15 +58,19 @@ class TDABot():
         pos = await self.client.get_accounts(fields=Client.Account.Fields.POSITIONS)
         pos_json = pos.json()
         msg = ""
+        pl = 0
         for i in pos_json[0]['securitiesAccount']['positions']:
             if i['instrument']['assetType'] == 'EQUITY':
                 msg += str(f"**{i['instrument']['symbol']}** shares x{i['longQuantity']}")
                 msg += str(f" at ${i['averagePrice']:.2f}\n --> Liq. Value ${i['marketValue']:.2f}\
  Today's P/L: ${i['currentDayProfitLoss']:.2f}\n")
+                pl += i['currentDayProfitLoss']
             elif i['instrument']['assetType'] == 'OPTION':
                 msg += str(f"**{i['instrument']['description']}** x{i['longQuantity']}")
                 msg += str(f" at ${i['averagePrice']:.2f}\n --> Liq. Value ${i['marketValue']:.2f}\
  Today's P/L: ${i['currentDayProfitLoss']:.2f}\n")
+                pl += i['currentDayProfitLoss']
+        msg += str(f"\n**Total Daily P/L: ${pl:.2f}**")
         return msg
 
     async def update_game(self):

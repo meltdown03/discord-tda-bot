@@ -92,6 +92,7 @@ class DCBot(commands.Cog):
     async def bal(self, ctx):
         user = ctx.author
         if user.id == DC_ID:
+            await self.tda_client.update_game()
             bal = await self.tda_client.get_bal
             embed = discord.Embed(title="Net Liq. Balance:", type="rich",
                                   colour=discord.Color.dark_green(), description=f"${bal:.2f}")
@@ -103,6 +104,7 @@ class DCBot(commands.Cog):
     async def bp(self, ctx):
         user = ctx.author
         if user.id == DC_ID:
+            await self.tda_client.update_game()
             bp = await self.tda_client.get_bp
             embed = discord.Embed(title="Buying Power:", type="rich",
                                   colour=discord.Color.dark_green(), description=f"${bp:.2f}")
@@ -114,6 +116,7 @@ class DCBot(commands.Cog):
     async def pos(self, ctx):
         user = ctx.author
         if user.id == DC_ID:
+            await self.tda_client.update_game()
             pos = await self.tda_client.get_pos
             embed = discord.Embed(title="Positions:", type="rich",
                                   colour=discord.Color.dark_green(), description=pos)
