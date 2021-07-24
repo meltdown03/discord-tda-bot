@@ -6,7 +6,7 @@ from discord import colour
 from discord.ext import commands
 from httpx._exceptions import HTTPStatusError
 
-from const import DC_ID, TOKEN_PATH
+from const import DC_ID, TOKEN_PATH, CLIENT_ID, ACCT_ID, RED_URL
 from tdaBot import TDABot
 
 logger = logging.getLogger('discord')
@@ -37,9 +37,15 @@ class DCBot(commands.Cog):
 
     @commands.command()
     async def start(self, ctx):
+        if CLIENT_ID and ACCT_ID and RED_URL and os.access(TOKEN_PATH, 2):
+            user = self.get_bot_user
+            await user.send("Credentials found")
+            self.set_tdaclient(CLIENT_ID)
+            await self.tda_client.update_game()
+            await self.tda_client.read_stream(user, ACCT_ID)
+
         user = self.get_bot_user
         await user.send("TDA Bot Online, enter TDA acount number:")
-
         try:
             account_id = await self.bot.wait_for('message', timeout=240.0, check=lambda m: (m.author == user))
             account_id = account_id.content
@@ -48,7 +54,6 @@ class DCBot(commands.Cog):
             await user.send("Timed out, restart bot")
 
         await user.send("Enter TDA API client ID:")
-
         try:
             client_id = await self.bot.wait_for('message', timeout=240.0, check=lambda m: (m.author == user))
             client_id = client_id.content
@@ -58,12 +63,10 @@ class DCBot(commands.Cog):
 
         if not os.access(TOKEN_PATH, 2):
             await user.send("Enter TDA API redirect URL:")
-
             try:
                 ref_url = await self.bot.wait_for('message', timeout=600.0, check=lambda m: (m.author == user))
                 ref_url = ref_url.content
                 self.set_tdaclient(client_id, ref_url)
-
                 try:
                     await self.tda_client.update_game()
                     await self.tda_client.read_stream(user, account_id)
@@ -77,7 +80,6 @@ class DCBot(commands.Cog):
         else:
             try:
                 self.set_tdaclient(client_id)
-
                 try:
                     await self.tda_client.update_game()
                     await self.tda_client.read_stream(user, account_id)
