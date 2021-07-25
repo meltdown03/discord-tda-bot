@@ -14,6 +14,7 @@ from tda.auth import client_from_token_file, easy_client
 from tda.client import Client
 from tda.streaming import StreamClient, UnexpectedResponseCode
 
+
 logger = logging.getLogger('')
 logger.setLevel(logging.DEBUG)
 handler = logging.FileHandler(filename='tda.log', encoding='utf-8', mode='w')
@@ -94,7 +95,8 @@ class TDABot():
 
                 if msgType == 'OrderEntryRequest':
                     await self.update_game()
-                    msgToSend = orderEntryRequestFormatter(parsedDict, timestamp)
+                    msgToSend = orderEntryRequestFormatter(
+                        parsedDict, timestamp)
                 elif msgType == 'OrderFill':
                     msgToSend = orderFillFormatter(parsedDict, timestamp)
                 elif msgType == 'UROUT':

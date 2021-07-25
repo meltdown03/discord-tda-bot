@@ -1,7 +1,5 @@
 from datetime import datetime
 
-from dateutil.parser import parse
-
 
 def orderEntryRequestFormatter(msgDict: dict, timestamp):
     msgDict = msgDict.get('OrderEntryRequestMessage').get('Order')
