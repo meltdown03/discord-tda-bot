@@ -8,7 +8,7 @@ intents = discord.Intents.default()
 intents.members = True
 
 dc = bot.Bot(command_prefix="/", intents=intents,
-             activity=discord.Game("type /start to connect to TDA"))
+             activity=discord.Game("/start to connect to TDA"))
 dc.add_cog(DCBot(dc))
 
 if __name__ == "__main__":
