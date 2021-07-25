@@ -1,5 +1,5 @@
 import json
-import logging
+#import logging
 import os
 
 import discord
@@ -15,12 +15,12 @@ from tda.client import Client
 from tda.streaming import StreamClient, UnexpectedResponseCode
 
 
-logger = logging.getLogger('')
-logger.setLevel(logging.DEBUG)
-handler = logging.FileHandler(filename='tda.log', encoding='utf-8', mode='w')
-handler.setFormatter(logging.Formatter(
-    '%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-logger.addHandler(handler)
+#logger = logging.getLogger('')
+#logger.setLevel(logging.DEBUG)
+#handler = logging.FileHandler(filename='tda.log', encoding='utf-8', mode='w')
+#handler.setFormatter(logging.Formatter(
+#    '%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+#logger.addHandler(handler)
 
 
 class TDABot():
@@ -105,7 +105,7 @@ class TDABot():
                 else:
                     await user.send(f"Unknown msg received from ACCT_ACTIVITY Stream: {rawJsonMSG}")
 
-                logger.info(f'Parsed Response JSON:\n{rawJsonMSG}')
+#                logger.info(f'Parsed Response JSON:\n{rawJsonMSG}')
                 await user.send(msgToSend)
 
             elif msgData == "" and msgType == "SUBSCRIBED" and self.loginMsgSent == False:
