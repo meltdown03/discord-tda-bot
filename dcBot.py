@@ -1,4 +1,3 @@
-#import logging
 import os
 
 import discord
@@ -6,22 +5,13 @@ from discord import colour
 from discord.ext import commands
 from httpx._exceptions import HTTPStatusError
 
-from const import DC_ID, TOKEN_PATH, CLIENT_ID, ACCT_ID, RED_URL
+from const import ACCT_ID, CLIENT_ID, DC_ID, RED_URL, TOKEN_PATH
 from tdaBot import TDABot
 
-#logger = logging.getLogger('discord')
-#logger.setLevel(logging.DEBUG)
-#handler = logging.FileHandler(
-#    filename='discord.log', encoding='utf-8', mode='w')
-#handler.setFormatter(logging.Formatter(
-#    '%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-#logger.addHandler(handler)
 
-
-class DCBot(commands.Cog):
+class DCBot(commands.Cog, name="TDA Cog"):
 
     def __init__(self, bot, *args, **kwargs):
-        super().__init__(*args, **kwargs)
         self.bot = bot
 
     def set_tdaclient(self, client_id, ref_url=None):

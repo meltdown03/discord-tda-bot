@@ -4,6 +4,7 @@ from discord.ext.commands import bot
 from const import DC_TOKEN
 from dcBot import DCBot
 
+
 intents = discord.Intents.default()
 intents.members = True
 
