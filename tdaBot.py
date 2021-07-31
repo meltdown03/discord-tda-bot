@@ -94,7 +94,14 @@ class TDABot():
                     await self.update_game()
                     msgToSend = orderCancelledFormatter(parsedDict, timestamp)
                 else:
-                    await user.send(f"Unknown msg received from ACCT_ACTIVITY Stream: {rawJsonMSG}")
+                    if len(rawJsonMSG) > 2000:
+                        await user.send("Unknown message received from ACCT_ACTIVITY Stream:")
+                        n = 2000
+                        split_strings = [rawJsonMSG[index : index + n] for index in range(0, len(rawJsonMSG), n)]
+                        for m in split_strings:
+                            await user.send(m)
+                    else:
+                        await user.send(f"Unknown msg received from ACCT_ACTIVITY Stream: {rawJsonMSG}")
 
                 await user.send(msgToSend)
 
