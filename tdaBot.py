@@ -84,15 +84,17 @@ class TDABot():
                     json.dumps(parsedDict, indent=2) + '\n```'
                 msgToSend = ''
 
-                if msgType == 'OrderEntryRequest':
+                if msgType == 'UROUT':
                     await self.update_game()
-                    msgToSend = orderEntryRequestFormatter(
-                        parsedDict, timestamp)
+                    # msgToSend = orderCancelledFormatter(parsedDict, timestamp)
+                    return
+                elif msgType == 'OrderEntryRequest':
+                    await self.update_game()
+                    # msgToSend = orderEntryRequestFormatter(
+                    #     parsedDict, timestamp)
+                    return
                 elif msgType == 'OrderFill':
                     msgToSend = orderFillFormatter(parsedDict, timestamp)
-                elif msgType == 'UROUT':
-                    await self.update_game()
-                    msgToSend = orderCancelledFormatter(parsedDict, timestamp)
                 else:
                     if len(rawJsonMSG) > 2000:
                         await user.send("Unknown message received from ACCT_ACTIVITY Stream:")
