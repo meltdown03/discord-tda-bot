@@ -94,6 +94,7 @@ class TDABot():
                     #     parsedDict, timestamp)
                     return
                 elif msgType == 'OrderFill':
+                    await self.update_game()
                     msgToSend = orderFillFormatter(parsedDict, timestamp)
                 else:
                     if len(rawJsonMSG) > 2000:
