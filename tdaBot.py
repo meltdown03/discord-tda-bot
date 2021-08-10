@@ -82,11 +82,11 @@ class TDABot():
 
             if msgData != "":
                 parsedDict = xmltodict.parse(msgData)
-                # optional debug info next 2 commands
-                rawJsonMSG = '```json\n' + \
-                    json.dumps(parsedDict, indent=2) + '\n```'
-                if len(rawJsonMSG) < 4000:
-                    await user.send(rawJsonMSG)
+                # optional debug info
+#                rawJsonMSG = '```json\n' + \
+#                    json.dumps(parsedDict, indent=2) + '\n```'
+#                if len(rawJsonMSG) < 2000:
+#                    await user.send(rawJsonMSG)
                 msgToSend = ''
 
                 if msgType == 'UROUT':
