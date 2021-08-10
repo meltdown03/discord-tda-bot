@@ -47,7 +47,7 @@ def orderEntryRequestFormatter(msgDict: dict, timestamp):
         price = msgDict.get('OrderPricing').get('Limit')
         msg += ' at ' + price
 
-    msg += '\n```'
+    msg += '\n```@everyone'
 
     return msg
 
@@ -97,7 +97,7 @@ def orderFillFormatter(msgDict: dict, timestamp):
 
     msg += ' - ' + execInfo.get('ExecutionPrice')
 
-    msg += '\n```'
+    msg += '\n```@everyone'
 
     return msg
 
@@ -148,6 +148,6 @@ def orderCancelledFormatter(msgDict: dict, timestamp):
         price = msgDict.get('OrderPricing').get('Limit')
         msg += ' at ' + price
 
-    msg += '\n```'
+    msg += '\n```@everyone'
 
     return msg

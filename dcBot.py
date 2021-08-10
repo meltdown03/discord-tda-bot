@@ -27,91 +27,82 @@ class DCBot(commands.Cog, name="TDA Cog"):
 
     @commands.command()
     async def start(self, ctx):
-        if CLIENT_ID and ACCT_ID and RED_URL and os.access(TOKEN_PATH, 2):
-            user = self.get_bot_user
-            await user.send("Credentials found")
-            self.set_tdaclient(CLIENT_ID)
-            await self.tda_client.update_game()
-            await self.tda_client.read_stream(user, ACCT_ID)
-
         user = self.get_bot_user
-        await user.send("TDA Bot Online, enter TDA acount number:")
-        try:
-            account_id = await self.bot.wait_for('message', timeout=240.0, check=lambda m: (m.author == user))
-            account_id = account_id.content
+        if ctx.author == user:
+            if CLIENT_ID and ACCT_ID and RED_URL and os.access(TOKEN_PATH, 2):
+                await user.send("Credentials found")
+                self.set_tdaclient(CLIENT_ID)
+                await self.tda_client.update_game()
+                await self.tda_client.read_stream(user, ACCT_ID)
 
-        except TimeoutError:
-            await user.send("Timed out, restart bot")
-
-        await user.send("Enter TDA API client ID:")
-        try:
-            client_id = await self.bot.wait_for('message', timeout=240.0, check=lambda m: (m.author == user))
-            client_id = client_id.content
-
-        except TimeoutError:
-            await user.send("Timed out, restart bot")
-
-        if not os.access(TOKEN_PATH, 2):
-            await user.send("Enter TDA API redirect URL:")
+            user = self.get_bot_user
+            await user.send("TDA Bot Online, enter TDA acount number:")
             try:
-                ref_url = await self.bot.wait_for('message', timeout=600.0, check=lambda m: (m.author == user))
-                ref_url = ref_url.content
-                self.set_tdaclient(client_id, ref_url)
-                try:
-                    await self.tda_client.update_game()
-                    await self.tda_client.read_stream(user, account_id)
-
-                except HTTPStatusError as e:
-                    await user.send(f"Error: {e}")
+                account_id = await self.bot.wait_for('message', timeout=240.0, check=lambda m: (m.author == user))
+                account_id = account_id.content
 
             except TimeoutError:
                 await user.send("Timed out, restart bot")
 
-        else:
+            await user.send("Enter TDA API client ID:")
             try:
-                self.set_tdaclient(client_id)
+                client_id = await self.bot.wait_for('message', timeout=240.0, check=lambda m: (m.author == user))
+                client_id = client_id.content
+
+            except TimeoutError:
+                await user.send("Timed out, restart bot")
+
+            if not os.access(TOKEN_PATH, 2):
+                await user.send("Enter TDA API redirect URL:")
                 try:
-                    await self.tda_client.update_game()
-                    await self.tda_client.read_stream(user, account_id)
+                    ref_url = await self.bot.wait_for('message', timeout=600.0, check=lambda m: (m.author == user))
+                    ref_url = ref_url.content
+                    self.set_tdaclient(client_id, ref_url)
+                    try:
+                        await self.tda_client.update_game()
+                        await self.tda_client.read_stream(user, account_id)
+
+                    except HTTPStatusError as e:
+                        await user.send(f"Error: {e}")
+
+                except TimeoutError:
+                    await user.send("Timed out, restart bot")
+
+            else:
+                try:
+                    self.set_tdaclient(client_id)
+                    try:
+                        await self.tda_client.update_game()
+                        await self.tda_client.read_stream(user, account_id)
+
+                    except HTTPStatusError as e:
+                        await user.send(f"Error: {e}")
 
                 except HTTPStatusError as e:
                     await user.send(f"Error: {e}")
-
-            except HTTPStatusError as e:
-                await user.send(f"Error: {e}")
+        else:
+            await ctx.user.send("Unauthorized, please ask the Server owner/admin to start the bot")
 
     @commands.command()
     async def bal(self, ctx):
-        user = ctx.author
-        if user.id == DC_ID:
-            await self.tda_client.update_game()
-            bal = await self.tda_client.get_bal
-            embed = discord.Embed(title="Net Liq. Balance:", type="rich",
-                                  colour=discord.Color.dark_green(), description=f"${bal:.2f}")
-            await user.send(embed=embed)
-        else:
-            await user.send("Unauthorized")
+        await self.tda_client.update_game()
+        bal = await self.tda_client.get_bal
+        embed = discord.Embed(title="Net Liq. Balance:", type="rich",
+                              colour=discord.Color.dark_green(), description=f"${bal:.2f}")
+        await ctx.channel.send(embed=embed)
 
     @commands.command()
     async def bp(self, ctx):
-        user = ctx.author
-        if user.id == DC_ID:
-            await self.tda_client.update_game()
-            bp = await self.tda_client.get_bp
-            embed = discord.Embed(title="Buying Power:", type="rich",
-                                  colour=discord.Color.dark_green(), description=f"${bp:.2f}")
-            await user.send(embed=embed)
-        else:
-            await user.send("Unauthorized")
+        await self.tda_client.update_game()
+        bp = await self.tda_client.get_bp
+        embed = discord.Embed(title="Buying Power:", type="rich",
+                              colour=discord.Color.dark_green(), description=f"${bp:.2f}")
+        await ctx.channel.send(embed=embed)
 
     @commands.command()
     async def pos(self, ctx):
-        user = ctx.author
-        if user.id == DC_ID:
-            await self.tda_client.update_game()
-            pos = await self.tda_client.get_pos
-            embed = discord.Embed(title="Positions:", type="rich",
-                                  colour=discord.Color.dark_green(), description=pos)
-            await user.send(embed=embed)
-        else:
-            await user.send("Unauthorized")
+        await self.tda_client.update_game()
+        pos = await self.tda_client.get_pos
+        embed = discord.Embed(title="Positions:", type="rich",
+                              colour=discord.Color.dark_green(), description=pos)
+        await ctx.channel.send(embed=embed)

@@ -3,10 +3,11 @@ import os
 
 import discord
 import xmltodict
+from discord import channel
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
-from const import TOKEN_PATH
+from const import CH_ID, TOKEN_PATH
 from parsers import (orderCancelledFormatter, orderEntryRequestFormatter,
                      orderFillFormatter)
 from tda.auth import client_from_token_file, easy_client
@@ -73,6 +74,7 @@ class TDABot():
 
     async def get_activity(self, msg):
         user = self.cog.get_bot_user
+        channel = self.bot.get_channel(CH_ID)
         timestamp = msg['timestamp']
         for msg in msg['content']:
             msgType = msg['MESSAGE_TYPE']
@@ -80,8 +82,11 @@ class TDABot():
 
             if msgData != "":
                 parsedDict = xmltodict.parse(msgData)
+                # optional debug info next 2 commands
                 rawJsonMSG = '```json\n' + \
                     json.dumps(parsedDict, indent=2) + '\n```'
+                if len(rawJsonMSG) < 4000:
+                    await user.send(rawJsonMSG)
                 msgToSend = ''
 
                 if msgType == 'UROUT':
@@ -98,7 +103,7 @@ class TDABot():
                     msgToSend = orderFillFormatter(parsedDict, timestamp)
                 else:
                     return
-                await user.send(msgToSend)
+                await channel.send(msgToSend)
 
             elif msgData == "" and msgType == "SUBSCRIBED" and self.loginMsgSent == False:
                 self.loginMsgSent = True
