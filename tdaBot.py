@@ -36,7 +36,7 @@ class TDABot():
     async def get_bp(self):
         accts = await self.client.get_accounts()
         acct_info = accts.json()
-        bp = acct_info[0]['securitiesAccount']['projectedBalances']['availableFunds']
+        bp = acct_info[0]['securitiesAccount']['projectedBalances']['buyingPower']
         return bp
 
     @property
@@ -45,6 +45,13 @@ class TDABot():
         acct_info = accts.json()
         bal = acct_info[0]['securitiesAccount']['currentBalances']['liquidationValue']
         return bal
+
+    @property
+    async def get_cash(self):
+        accts = await self.client.get_accounts()
+        acct_info = accts.json()
+        cash = acct_info[0]['securitiesAccount']['initialBalances']['totalCash']
+        return cash
 
     @property
     async def get_pos(self):
@@ -91,19 +98,22 @@ class TDABot():
 
                 if msgType == 'UROUT':
                     await self.update_game()
-                    # msgToSend = orderCancelledFormatter(parsedDict, timestamp)
+#                    msgToSend = orderCancelledFormatter(parsedDict, timestamp)
+#                    embed = discord.Embed(title="Order Cancelled Notice", color=discord.Color.dark_red(), type="rich", description=msgToSend)
                     return
                 elif msgType == 'OrderEntryRequest':
                     await self.update_game()
-                    # msgToSend = orderEntryRequestFormatter(
-                    #     parsedDict, timestamp)
+#                    msgToSend = orderEntryRequestFormatter(
+#                        parsedDict, timestamp)
+#                    embed = discord.Embed(title="Order Requested Notice", color=discord.Color.dark_orange(), type="rich", description=msgToSend)
                     return
                 elif msgType == 'OrderFill':
                     await self.update_game()
                     msgToSend = orderFillFormatter(parsedDict, timestamp)
+                    embed = discord.Embed(title="Order Filled Notice", color=discord.Color.dark_green(), type="rich", description=msgToSend)
                 else:
                     return
-                await channel.send(msgToSend)
+                await channel.send(embed=embed)
 
             elif msgData == "" and msgType == "SUBSCRIBED" and self.loginMsgSent == False:
                 self.loginMsgSent = True

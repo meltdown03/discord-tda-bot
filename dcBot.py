@@ -106,3 +106,11 @@ class DCBot(commands.Cog, name="TDA Cog"):
         embed = discord.Embed(title="Positions:", type="rich",
                               colour=discord.Color.dark_green(), description=pos)
         await ctx.channel.send(embed=embed)
+
+    @commands.command()
+    async def cash(self, ctx):
+        await self.tda_client.update_game()
+        cash = await self.tda_client.get_cash
+        embed = discord.Embed(title="Total Cash:", type="rich",
+                              colour=discord.Color.dark_green(), description=f"${cash:.2f}")
+        await ctx.channel.send(embed=embed)

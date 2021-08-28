@@ -22,7 +22,7 @@ def orderEntryRequestFormatter(msgDict: dict, timestamp):
     if msgDict.get('Security').get('SymbolUnderlying'):
         msg += ' ' + msgDict.get('Security').get('SymbolUnderlying')
 
-    msg += ') {Order Requested}** - '
+    msg += ')** - '
 
     if optionTDAString:
         msg += '(' + optionTDAString + ') '
@@ -47,7 +47,7 @@ def orderEntryRequestFormatter(msgDict: dict, timestamp):
         price = msgDict.get('OrderPricing').get('Limit')
         msg += ' at ' + price
 
-    msg += '\n```@everyone'
+    msg += '\n```\n||@everyone||'
 
     return msg
 
@@ -74,7 +74,7 @@ def orderFillFormatter(msgDict: dict, timestamp):
     if order.get('Security').get('SymbolUnderlying'):
         msg += ' ' + order.get('Security').get('SymbolUnderlying')
 
-    msg += ') <<<Order Executed>>> ** - '
+    msg += ')** - '
 
     if optionTDAString:
         msg += '(' + optionTDAString + ') '
@@ -97,7 +97,7 @@ def orderFillFormatter(msgDict: dict, timestamp):
 
     msg += ' - ' + execInfo.get('ExecutionPrice')
 
-    msg += '\n```@everyone'
+    msg += '\n```\n||@everyone||'
 
     return msg
 
@@ -123,7 +123,7 @@ def orderCancelledFormatter(msgDict: dict, timestamp):
     if msgDict.get('Security').get('SymbolUnderlying'):
         msg += ' ' + msgDict.get('Security').get('SymbolUnderlying')
 
-    msg += ') {Order Cancelled}** - '
+    msg += ')** - '
 
     if optionTDAString:
         msg += '(' + optionTDAString + ') '
@@ -148,6 +148,6 @@ def orderCancelledFormatter(msgDict: dict, timestamp):
         price = msgDict.get('OrderPricing').get('Limit')
         msg += ' at ' + price
 
-    msg += '\n```@everyone'
+    msg += '\n```\n||@everyone||'
 
     return msg
