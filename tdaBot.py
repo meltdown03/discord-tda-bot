@@ -50,7 +50,7 @@ class TDABot():
     async def get_cash(self):
         accts = await self.client.get_accounts()
         acct_info = accts.json()
-        cash = acct_info[0]['securitiesAccount']['initialBalances']['totalCash']
+        cash = acct_info[0]['securitiesAccount']['currentBalances']['equity']
         return cash
 
     @property
